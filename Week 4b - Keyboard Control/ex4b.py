@@ -1,123 +1,123 @@
 #1
-import simplegui 
+import simplegui
 
-counter = 0
+message = "Welcome!"
 
-# Timer handler
-def tick():
-    global counter
-    print counter
-    counter += 1
+# Handler for keydown
+def keydown(key):
+    global message
+    if key == simplegui.KEY_MAP["up"]:
+        message = "Up arrow"
+    elif chr(key) == simplegui.KEY_MAP["down"]:
+        message = "Down arrow"
 
-# create timer
-timer = simplegui.create_timer(1000, tick)
-timer.start()
+# Handler to draw on canvas
+def draw(canvas):
+    canvas.draw_text(message, [50,112], 48, "Red")
+
+# Create a frame and assign callbacks to event handlers
+frame = simplegui.create_frame("Home", 300, 200)
+frame.set_keydown_handler(keydown)
+frame.set_keyup_handler(keydown)
+frame.set_draw_handler(draw)
+
+# Start the frame animation
+frame.start()
 
 #2
-import simplegui 
+import simplegui
 
-counter = 0
+WIDTH = 300
+HEIGHT = 200
+ball_radius = 50
+BALL_RADIUS_INC = 3
 
-# Timer handler
-def tick():
-    global counter
-    print counter
-    counter += 1
-    
-# Event handlers for buttons
-def resume():
-    timer.start()
-    
-def pause():
-    timer.stop()
+# Handler for keydown
+def keydown(key):
+    global ball_radius
+    if key == simplegui.KEY_MAP["up"]:
+        ball_radius += 1
+    elif key == simplegui.KEY_MAP["down"] and ball_radius > 1:
+        ball_radius -= 1
 
-def restart():
-    global counter
-    counter = 0
-       
-# Create frame and timer
-frame = simplegui.create_frame("Counter with buttons", 200, 200)
-resumeButton = frame.add_button('Resume', resume, 100)
-pauseButton = frame.add_button('Pause', pause, 100)
-restartButton = frame.add_button('Restart', restart, 100)
-timer = simplegui.create_timer(1000, tick)
+# Handler to draw on canvas
+def draw(canvas):
+    # note that CodeSkulptor throws an error if radius is not positive
+    canvas.draw_circle([WIDTH / 2, HEIGHT / 2], ball_radius, 1, "White", "White")
+
+# Create a frame and assign callbacks to event handlers
+frame = simplegui.create_frame("Home", 300, 200)
+frame.set_keydown_handler(keydown)
+frame.set_draw_handler(draw)
+
+# Start the frame animation
 frame.start()
 
 #3
-import simplegui 
+import simplegui
 
-color = "Red"
+message = "Space bar up"
 
-# Timer handler
-def tick():
-    global color
-    color = 'Blue' if color == 'Red' else 'Red'
-    frame.set_canvas_background(color)
-    
-    
-# Create frame and timer
-frame = simplegui.create_frame("Counter with buttons", 200, 200)
-timer = simplegui.create_timer(3000, tick)
+# Handlers for keydown and keyup
+def keydown(key):
+    global message
+    message = "Space bar down"
+    # add code here
 
-# Start timer
+
+def keyup(key):
+    global message
+    message = "Space bar up"
+    # add code here 
+
+
+# Handler to draw on canvas
+def draw(canvas):
+    canvas.draw_text(message, [25, 112], 42, "Red")
+
+# Create a frame and assign callbacks to event handlers
+frame = simplegui.create_frame("Home", 300, 200)
+frame.set_keydown_handler(keydown)
+frame.set_keyup_handler(keyup)
+frame.set_draw_handler(draw)
+
+# Start the frame animation
 frame.start()
-timer.start()
 
 #4
-import simplegui 
+import simplegui
 
-WIDTH = 200
+WIDTH = 300
 HEIGHT = 200
-radius = 1
+ball_radius = 10
+ball_growth = 0
+BALL_GROWTH_INC = .2
 
+# Handlers for keydown and keyup
+def keydown(key):
+    global ball_growth
+    if key == simplegui.KEY_MAP["up"]:
+        ball_growth += BALL_GROWTH_INC
 
-# Timer handler
-def tick():
-    global radius
-    radius += 1
+def keyup(key):
+    global ball_growth
+    if key == simplegui.KEY_MAP["up"]:
+        ball_growth = 0
     
-# Draw handler
-def draw_handler(canvas):
-    canvas.draw_circle((WIDTH / 2, HEIGHT / 2), radius, 1, 'Green')
-        
-# Create frame and timer
-frame = simplegui.create_frame('#4', 200, 200)
-timer = simplegui.create_timer(100, tick)
-frame.set_draw_handler(draw_handler)
-
-# Start timer
-frame.start()
-timer.start()
-
-#5
-import simplegui 
-
-total_ticks = 0
-first_click = True
-
-
-# Timer handler
-def tick():
-    global total_ticks
-    total_ticks += 1
+# Handler to draw on canvas
+def draw(canvas):
+    global ball_radius
+    ball_radius += ball_growth
     
-# Button handler
-def click():
-    global first_click
-    global total_ticks
-    if first_click == True:
-        first_click = False
-        timer.start()
-    else:
-        first_click = True
-        timer.stop()
-        print 'Your reaction time is ' + str(total_ticks / 100.0) + 's'
-        total_ticks = 0
-        
-# Create frame and timer
-frame = simplegui.create_frame("Counter with buttons", 200, 200)
-frame.add_button("Start/Stop", click, 200)
-timer = simplegui.create_timer(10, tick)
+    # note that CodeSkulptor throws an error if radius is not positive
+    canvas.draw_circle([WIDTH / 2, HEIGHT / 2], ball_radius, 1, "White", "White")
 
-# Start timer
+# Create a frame and assign callbacks to event handlers
+frame = simplegui.create_frame("Home", 300, 200)
+frame.set_keydown_handler(keydown)
+frame.set_keyup_handler(keyup)
+
+frame.set_draw_handler(draw)
+
+# Start the frame animation
 frame.start()
