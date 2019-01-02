@@ -1,123 +1,83 @@
 #1
-import simplegui 
-
-counter = 0
-
-# Timer handler
-def tick():
-    global counter
-    print counter
-    counter += 1
-
-# create timer
-timer = simplegui.create_timer(1000, tick)
-timer.start()
+prime_numbers = [2, 3, 5, 7, 11, 13]
+print prime_numbers[1], prime_numbers[3], prime_numbers[5]
 
 #2
-import simplegui 
+a = [5, 3, 1, -1, -3, 5]
+b = a
+b[0] = 0
+print a
 
-counter = 0
-
-# Timer handler
-def tick():
-    global counter
-    print counter
-    counter += 1
-    
-# Event handlers for buttons
-def resume():
-    timer.start()
-    
-def pause():
-    timer.stop()
-
-def restart():
-    global counter
-    counter = 0
-       
-# Create frame and timer
-frame = simplegui.create_frame("Counter with buttons", 200, 200)
-resumeButton = frame.add_button('Resume', resume, 100)
-pauseButton = frame.add_button('Pause', pause, 100)
-restartButton = frame.add_button('Restart', restart, 100)
-timer = simplegui.create_timer(1000, tick)
-frame.start()
+# Since b is pointing to the same list as a, modifying b[0] is also modifying a[0]. 
+# Therefore when we changed b[0] = 0, we also changed a[0] = 0
 
 #3
-import simplegui 
+a = [5, 3, 1, -1, -3, 5]
+b = list(a)
+b[0] = 0
+print a
 
-color = "Red"
-
-# Timer handler
-def tick():
-    global color
-    color = 'Blue' if color == 'Red' else 'Red'
-    frame.set_canvas_background(color)
-    
-    
-# Create frame and timer
-frame = simplegui.create_frame("Counter with buttons", 200, 200)
-timer = simplegui.create_timer(3000, tick)
-
-# Start timer
-frame.start()
-timer.start()
+# Calling the list() function creates a new copy of the list passed in the argument, 
+# since both a and b are pointing to different objects. Modifying b[0] does not modify a[0]
 
 #4
-import simplegui 
-
-WIDTH = 200
-HEIGHT = 200
-radius = 1
-
-
-# Timer handler
-def tick():
-    global radius
-    radius += 1
-    
-# Draw handler
-def draw_handler(canvas):
-    canvas.draw_circle((WIDTH / 2, HEIGHT / 2), radius, 1, 'Green')
-        
-# Create frame and timer
-frame = simplegui.create_frame('#4', 200, 200)
-timer = simplegui.create_timer(100, tick)
-frame.set_draw_handler(draw_handler)
-
-# Start timer
-frame.start()
-timer.start()
+def add_vector(v, w):
+    return [v[0] + w[0], v[1] + w[1]]
 
 #5
-import simplegui 
+import simplegui
 
-total_ticks = 0
-first_click = True
+# Initialize two counters.
+counter1 = [0, 0]
+counter2 = list(counter1)
 
 
-# Timer handler
-def tick():
-    global total_ticks
-    total_ticks += 1
+# Define event handlers.
+def start1():
+    timer1.start()
     
-# Button handler
-def click():
-    global first_click
-    global total_ticks
-    if first_click == True:
-        first_click = False
-        timer.start()
+def stop1():
+    timer1.stop()
+    
+def start2():
+    timer2.start()
+    
+def stop2():
+    timer2.stop()
+    
+def tick1():
+    global counter
+    if counter1[1] == 9:
+        counter1[0] += 1
+        counter1[1] = 0
     else:
-        first_click = True
-        timer.stop()
-        print 'Your reaction time is ' + str(total_ticks / 100.0) + 's'
-        total_ticks = 0
-        
-# Create frame and timer
-frame = simplegui.create_frame("Counter with buttons", 200, 200)
-frame.add_button("Start/Stop", click, 200)
-timer = simplegui.create_timer(10, tick)
+        counter1[1] += 1
 
-# Start timer
+def tick2():
+    global counter
+    if counter2[1] == 9:
+        counter2[0] += 1
+        counter2[1] = 0
+    else:
+        counter2[1] += 1
+        
+        
+# Define draw handler.
+def draw(canvas):
+    canvas.draw_text("Timer 1:     " + str(counter1[0] % 10) + "." + str(counter1[1]), [50, 100], 24, "White")
+    canvas.draw_text("Timer 2:     " + str(counter2[0] % 10) + "." + str(counter2[1]), [50, 200], 24, "White")
+
+# Register event handlers.
+frame = simplegui.create_frame("Mystery bug", 300, 300)
+frame.add_button("Start timer1", start1, 200)
+frame.add_button("Stop timer1", stop1, 200)
+frame.add_button("Start timer2", start2, 200)
+frame.add_button("Stop timer2", stop2, 200)
+frame.set_draw_handler(draw)
+
+timer1 = simplegui.create_timer(100, tick1)
+timer2 = simplegui.create_timer(100, tick2)
+
+
+# Start frame.
 frame.start()
